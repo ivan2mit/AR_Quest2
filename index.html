@@ -96,6 +96,11 @@
       display: none;
     }
 
+    #sidebar {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* плавный сброс */
+      touch-action: none; /* важно — иначе браузер будет скроллить страницу */
+    }
+
     /* Model viewer */
     model-viewer {
       width: 100%;
@@ -182,6 +187,61 @@
     let models = [];
     let activeButton = null;
     let currentSound = null;
+
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    sidebar.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      currentX = startX;
+      sidebar.style.transition = 'none'; // отключаем анимацию при тяге
+    });
+    
+    sidebar.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+      const deltaX = currentX - startX;
+    
+      // Разрешаем тянуть только вправо (убирать меню)
+      if (deltaX > 0) {
+        sidebar.style.transform = `translateX(${deltaX}px)`;
+      }
+    });
+    
+    sidebar.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+    
+      // Если потянули больше чем на 30% ширины — скрываем
+      if (currentX - startX > sidebar.offsetWidth * 0.3) {
+        sidebar.classList.add('hidden');
+      } else {
+        // Иначе — возвращаем на место
+        sidebar.style.transform = 'translateX(0)';
+      }
+    });
+
+    sidebar.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+    
+      const deltaX = currentX - startX;
+      const isSwipe = Math.abs(deltaX) > 20; // если сдвинули больше чем на 20px
+    
+      if (deltaX > 0 && isSwipe) {
+        sidebar.classList.add('hidden');
+        // Отменяем клик, если был свайп
+        if (e.target.closest('button')) {
+          e.preventDefault();
+        }
+      } else {
+        sidebar.style.transform = 'translateX(0)';
+      }
+    });
 
     // Загружаем список моделей
     fetch('models.json')

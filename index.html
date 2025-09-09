@@ -357,9 +357,23 @@
     // Управление меню
     toggleBtn.onclick = () => sidebar.classList.remove('hidden');
 
+    // document.addEventListener('click', (e) => {
+    //   if (e.target === sidebar || e.target.closest('#sidebar')) return;
+    //   if (e.target.matches('#sidebar-toggle')) return;
+    //   sidebar.classList.add('hidden');
+    // });
+
     document.addEventListener('click', (e) => {
-      if (e.target === sidebar || e.target.closest('#sidebar')) return;
+      // Если меню скрыто — ничего не делаем
+      if (sidebar.classList.contains('hidden')) return;
+    
+      // Если клик по кнопке переключения — не закрываем
       if (e.target.matches('#sidebar-toggle')) return;
+    
+      // Если клик внутри меню — не закрываем
+      if (e.target === sidebar || e.target.closest('#sidebar')) return;
+    
+      // Иначе — закрываем
       sidebar.classList.add('hidden');
     });
 

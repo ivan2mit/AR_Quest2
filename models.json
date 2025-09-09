@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Ваза с гранями",
+    "file": "models/vase1.glb"
+  },
+  {
+    "name": "Ваза с гранями и скруглением",
+    "file": "models/vase2.glb"
+  },
+  {
+    "name": "Фигурная ваза",
+    "file": "models/vase3.glb"
+  }
+]

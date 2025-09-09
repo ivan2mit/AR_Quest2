@@ -244,6 +244,9 @@
     // });
 
     sidebar.addEventListener('touchend', (e) => {
+      if (isDragging && Math.abs(currentX - startX) > 20) {
+        e.preventDefault(); // 👈 Отменяет эмуляцию click после свайпа
+      }
       if (!isDragging) return;
       isDragging = false;
     

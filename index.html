@@ -285,22 +285,46 @@
     // Рендерим кнопки моделей
     function renderModelButtons() {
       modelList.innerHTML = '';
+
+      
       models.forEach((model, index) => {
         const btn = document.createElement('button');
         btn.textContent = model.name;
         btn.dataset.src = model.file;
         btn.dataset.poster = model.poster || '';
         btn.dataset.sound = model.sound || '';
-        btn.onclick = () => loadModel(btn, model);
+      
+        // 👇 Важно: останавливаем всплытие клика
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          loadModel(btn, model);
+        };
+      
         modelList.appendChild(btn);
-
-        // Автоматически загружаем ПЕРВУЮ модель
+      
         if (index === 0) {
           setTimeout(() => {
             loadModel(btn, model);
           }, 100);
         }
       });
+      
+      // models.forEach((model, index) => {
+      //   const btn = document.createElement('button');
+      //   btn.textContent = model.name;
+      //   btn.dataset.src = model.file;
+      //   btn.dataset.poster = model.poster || '';
+      //   btn.dataset.sound = model.sound || '';
+      //   btn.onclick = () => loadModel(btn, model);
+      //   modelList.appendChild(btn);
+
+      //   // Автоматически загружаем ПЕРВУЮ модель
+      //   if (index === 0) {
+      //     setTimeout(() => {
+      //       loadModel(btn, model);
+      //     }, 100);
+      //   }
+      // });
     }
 
     // Загружаем модель

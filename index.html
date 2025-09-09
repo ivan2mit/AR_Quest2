@@ -277,9 +277,11 @@
           e.stopPropagation();
           loadModel(btn, model);
           // Скрываем меню после выбора модели
+          sidebar.style.transition = 'transform 0.3s ease';
+          sidebar.style.transform = 'translateX(100%)';
           setTimeout(() => {
             sidebar.classList.add('hidden');
-          }, 100);
+          }, 300);
         });
       
         modelList.appendChild(btn);

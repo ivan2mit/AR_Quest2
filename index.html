@@ -224,21 +224,44 @@
       }
     });
 
+    // sidebar.addEventListener('touchend', (e) => {
+    //   if (!isDragging) return;
+    //   isDragging = false;
+    //   sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+    
+    //   const deltaX = currentX - startX;
+    //   const isSwipe = Math.abs(deltaX) > 20; // если сдвинули больше чем на 20px
+    
+    //   if (deltaX > 0 && isSwipe) {
+    //     sidebar.classList.add('hidden');
+    //     // Отменяем клик, если был свайп
+    //     if (e.target.closest('button')) {
+    //       e.preventDefault();
+    //     }
+    //   } else {
+    //     sidebar.style.transform = 'translateX(0)';
+    //   }
+    // });
+
     sidebar.addEventListener('touchend', (e) => {
       if (!isDragging) return;
       isDragging = false;
-      sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
     
       const deltaX = currentX - startX;
-      const isSwipe = Math.abs(deltaX) > 20; // если сдвинули больше чем на 20px
+      const isSwipe = Math.abs(deltaX) > 20;
+    
+      // Включаем плавную анимацию
+      sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
     
       if (deltaX > 0 && isSwipe) {
-        sidebar.classList.add('hidden');
-        // Отменяем клик, если был свайп
-        if (e.target.closest('button')) {
-          e.preventDefault();
-        }
+        // Сначала применяем transform — иначе анимации не будет
+        sidebar.style.transform = 'translateX(100%)';
+        // Потом добавляем класс для состояния
+        setTimeout(() => {
+          sidebar.classList.add('hidden');
+        }, 300); // чтобы класс добавился после анимации
       } else {
+        // Возвращаем на место
         sidebar.style.transform = 'translateX(0)';
       }
     });

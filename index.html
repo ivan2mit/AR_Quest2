@@ -27,7 +27,7 @@
       overflow-y: auto;
       box-shadow: -4px 0 12px rgba(0,0,0,0.5);
       transition: transform 0.3s ease;
-      touch-action: none; /* важно — иначе браузер будет скроллить страницу */
+      touch-action: none;
     }
 
     #sidebar::before {
@@ -94,7 +94,7 @@
       border-radius: 50%;
       font-size: 18px;
       cursor: pointer;
-      display: none;
+      display: block; /* Всегда показываем кнопку */
     }
 
     /* Model viewer */
@@ -144,7 +144,7 @@
 <body>
 
   <!-- Боковое меню с моделями -->
-  <div id="sidebar">
+  <div id="sidebar" class="hidden"> <!-- По умолчанию скрыто -->
     <h3>🎭 Персонажи</h3>
     <div id="model-list">Загрузка моделей...</div>
     <h3>🕹️ Действия</h3>
@@ -187,23 +187,33 @@
     let startX = 0;
     let currentX = 0;
     let isDragging = false;
+    let startTransform = 0;
     
     // Обработчики свайпа для бокового меню
     sidebar.addEventListener('touchstart', (e) => {
       isDragging = true;
       startX = e.touches[0].clientX;
-      currentX = startX;
-      sidebar.style.transition = 'none'; // отключаем анимацию при тяге
+      // Получаем текущее значение transform
+      const transform = sidebar.style.transform;
+      if (transform) {
+        const match = transform.match(/translateX\(([^)]+)px\)/);
+        startTransform = match ? parseFloat(match[1]) || 0 : 0;
+      } else {
+        startTransform = 0;
+      }
+      sidebar.style.transition = 'none';
     });
     
     sidebar.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
+      e.preventDefault(); // Предотвращаем скролл страницы
       currentX = e.touches[0].clientX;
       const deltaX = currentX - startX;
-    
+      
       // Разрешаем тянуть только вправо (убирать меню)
       if (deltaX > 0) {
-        sidebar.style.transform = `translateX(${Math.min(deltaX, sidebar.offsetWidth)}px)`;
+        const newTransform = Math.min(startTransform + deltaX, sidebar.offsetWidth);
+        sidebar.style.transform = `translateX(${newTransform}px)`;
       }
     });
     
@@ -313,6 +323,10 @@
     // Управление меню
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.remove('hidden');
+      // Убеждаемся, что меню находится в правильном положении
+      setTimeout(() => {
+        sidebar.style.transform = 'translateX(0)';
+      }, 10);
     });
 
     // Закрытие меню при клике вне его области
@@ -332,7 +346,9 @@
 
     // Показываем/скрываем кнопку меню при завершении анимации
     sidebar.addEventListener('transitionend', () => {
-      toggleBtn.style.display = sidebar.classList.contains('hidden') ? 'block' : 'none';
+      if (sidebar.classList.contains('hidden')) {
+        toggleBtn.style.display = 'block';
+      }
     });
 
     // При входе в AR — если есть звук, продолжаем

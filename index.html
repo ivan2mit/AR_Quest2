@@ -277,7 +277,9 @@
           e.stopPropagation();
           loadModel(btn, model);
           // Скрываем меню после выбора модели
-          sidebar.classList.add('hidden');
+          setTimeout(() => {
+            sidebar.classList.add('hidden');
+          }, 100);
         });
       
         modelList.appendChild(btn);

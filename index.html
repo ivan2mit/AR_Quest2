@@ -224,24 +224,6 @@
       }
     });
 
-    // sidebar.addEventListener('touchend', (e) => {
-    //   if (!isDragging) return;
-    //   isDragging = false;
-    //   sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-    
-    //   const deltaX = currentX - startX;
-    //   const isSwipe = Math.abs(deltaX) > 20; // если сдвинули больше чем на 20px
-    
-    //   if (deltaX > 0 && isSwipe) {
-    //     sidebar.classList.add('hidden');
-    //     // Отменяем клик, если был свайп
-    //     if (e.target.closest('button')) {
-    //       e.preventDefault();
-    //     }
-    //   } else {
-    //     sidebar.style.transform = 'translateX(0)';
-    //   }
-    // });
 
     sidebar.addEventListener('touchend', (e) => {
       if (isDragging && Math.abs(currentX - startX) > 20) {
@@ -312,23 +294,6 @@
         }
       });
       
-      // models.forEach((model, index) => {
-      //   const btn = document.createElement('button');
-      //   btn.textContent = model.name;
-      //   btn.dataset.src = model.file;
-      //   btn.dataset.poster = model.poster || '';
-      //   btn.dataset.sound = model.sound || '';
-      //   btn.onclick = () => loadModel(btn, model);
-      //   modelList.appendChild(btn);
-
-      //   // Автоматически загружаем ПЕРВУЮ модель
-      //   if (index === 0) {
-      //     setTimeout(() => {
-      //       loadModel(btn, model);
-      //     }, 100);
-      //   }
-      // });
-    }
 
     // Загружаем модель
     function loadModel(btn, model) {
@@ -360,11 +325,6 @@
     // Управление меню
     toggleBtn.onclick = () => sidebar.classList.remove('hidden');
 
-    // document.addEventListener('click', (e) => {
-    //   if (e.target === sidebar || e.target.closest('#sidebar')) return;
-    //   if (e.target.matches('#sidebar-toggle')) return;
-    //   sidebar.classList.add('hidden');
-    // });
 
     document.addEventListener('click', (e) => {
       // Если меню скрыто — ничего не делаем

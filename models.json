@@ -1,5 +1,9 @@
 [
   {
+    "name": "Раковина 1 вариант",
+    "file": "models/Раковина.glb"
+  },
+  {
     "name": "Ваза с гранями",
     "file": "models/vase1.glb"
   },
